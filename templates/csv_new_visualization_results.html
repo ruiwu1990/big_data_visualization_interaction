@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Data Visualization and Interaction</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />	
+	<!--[if lte IE 7]>
+		<link rel="stylesheet" href="css/ie.css" type="text/css" charset="utf-8" />	
+	<![endif]-->
+</head>
+
+<body>
+	<div id="header">
+		<a href="index.html" id="logo"><img src="images/logo.jpg" alt="LOGO" /></a>
+		<div id="navigation">
+			<ul>
+				<li class="first selected"><a href="/">Home</a></li>
+				<!--<li><a href="about.html">About us</a></li>-->
+				<li><a href="#">Visualization</a>
+                                <ul>
+                                     <li><a href="linechart.html">Line Chart</a></li>
+                                     <li><a href="#">Pie Chart</a></li>
+                                     <li><a href="#">2D Map</a></li>
+                                </ul>
+                                </li>
+				<li><a href="solutions.html">Solutions</a></li>
+				<!--<li><a href="support.html">Support</a></li>-->
+				<!--<li><a href="blog.html">Blog</a></li>-->
+				<li><a href="/contact">Contact</a></li>
+			</ul>
+		</div>
+		<div id="search">
+			<form action="" method="">
+				<input type="text" value="Search" class="txtfield" onblur="javascript:if(this.value==''){this.value=this.defaultValue;}" onfocus="javascript:if(this.value==this.defaultValue){this.value='';}" />
+				<input type="submit" value="" class="button" />
+			</form>
+		</div>
+	</div> <!-- /#header -->
+	<div id="contents" align='center' style="color:white" >
+		<script type="text/javascript">
+		    var timerStart = Date.now();
+		</script>
+
+		<style> /* set the local CSS */
+		div.csvMetadata
+		{
+			display:none;
+		}
+
+		div.csvFileName
+		{
+			display:none;
+		}
+
+		img.csv_results {
+		  width: 800px;
+		  height: 600px;
+		  background: url(loading.gif) 50% no-repeat;
+		  border: 1px solid black;
+		  border-radius: 5px;
+		}
+
+		</style>
+
+
+
+		<!-- THIS IS USED TO GET METADATA OF CSV FILES-->
+		<div class="csvMetadata">
+			{{ item_name_list|join(", ") }}
+		</div>
+
+		<div class="imgName">
+			{{ input_filename }}
+		</div>
+
+		<div class="csvFileName">
+			{{filename}}
+		</div>
+
+
+		<div class = "visParagraph">
+
+			<div id = "lineChartdiv" onmousedown="mouseDownBody(event)" onmouseup="mouseUpBody(event)">
+				<canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;" onmousedown="mouseDown(event)" onmouseup="mouseUp(event)">
+				<img src={{ input_filename }} alt="csv visualization results" class='csv_results' id="aim_img">
+				<img id="loading_img" src="loading.png" alt="loading example" style="width:800;height:600;"> 
+			</div>
+
+			<div>
+				{% for name in item_name_list %}
+					<!-- THIS IS SKIP THE FIRST ELEMENT, COZ FIRST ELEMENT WILL BE X AXIS -->
+					{% if loop.index == 1 %}
+					
+					<!-- THIS IS USED TO SEPARATE ITEMS -->
+					{% elif loop.index is divisibleby 4 %}
+						<br>
+						<input type = "checkbox" id = "{{loop.index}}" class='checkBox{{loop.index}}' onClick="change(this)" checked>	
+						<label for="{{loop.index}}"> {{name}}</label>
+					{% else %}
+						<input type = "checkbox" id = "{{loop.index}}" class='checkBox{{loop.index}}' onClick="change(this)" checked>	
+						<label for="{{loop.index}}"> {{name}}</label>
+					{% endif %}
+				{% endfor %}
+			</div>
+
+			<div class = "Buttons">
+				<!--<input type="button" onclick="downloadData()" value="downloadCSV" />-->
+				<input type="button" onclick="screenShot()" value="Display Vis Screenshot" />
+				<input type="button" onclick="zoomOut()" value="Zoom Out" />
+				<input type="button" onclick="location.href='/downloadChosenFile/{{filename}}';" value="Download the Chosen Data" />
+				<input type="button" onclick="location.href='/';" value="Go Back" />
+			</div>
+
+			<!-- this part is for test only -->
+			<p class='testP'></p>
+
+
+		</div>
+
+
+		<!-- VISUALIZATION PART -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://dygraphs.com/dygraph-combined.js"></script>
+		<!-- THIS JS IS USED TO EXPORT ARRAY INTO CSV AND DOWNLOAD LOCALLY -->
+		<script src="http://alasql.org/console/alasql.min.js"></script>
+		<!-- THIS JS IS USED TO TAKE SCREENSHOT -->
+		<script src='js/html2canvas.js' type='text/javascript'></script>
+		<script src='js/csv_new_line_chart.js' type='text/javascript'></script>
+		<script src='js/onclick.js' type='text/javascript'></script>
+
+
+
+		<script type="text/javascript">
+		     $(document).ready(function() {
+		         console.log("Time until DOMready: ", Date.now()-timerStart);
+		     });
+		     $(window).load(function() {
+		         console.log("Time until everything loaded: ", Date.now()-timerStart);
+		     });
+		</script>
+	</div> <!-- /#contents -->
+	<div id="footer">
+		<ul class="contacts">
+			<h3>Contact Us</h3>
+			<li><span>Email</span><p>: company@email.com</p></li>
+			<li><span>Address</span><p>: 189 Lorem Ipsum Pellentesque, Mauris Etiam ut velit odio Proin id nisi enim 0000</p></li>
+			<li><span>Phone</span><p>: 117-683-9187-000</p></li>
+		</ul>
+		<ul id="connect">
+			<h3>Get Updated</h3>
+			<li><a href="blog.html">Blog</a></li>
+			<li><a href="http://facebook.com/" target="_blank">Facebook</a></li>
+			<li><a href="http://twitter.com/" target="_blank">Twitter</a></li>
+		</ul>
+		<div id="newsletter">
+			<p><b>Sign-up for Newsletter</b>
+				In sollicitudin vulputate metus, sed commodo diam elementum nec. Sed et risus sed magna convallis adipiscing.
+			</p>
+			<form action="" method="">
+				<input type="text" value="Name" class="txtfield" onblur="javascript:if(this.value==''){this.value=this.defaultValue;}" onfocus="javascript:if(this.value==this.defaultValue){this.value='';}" />
+				<input type="text" value="Enter Email Address" class="txtfield" onblur="javascript:if(this.value==''){this.value=this.defaultValue;}" onfocus="javascript:if(this.value==this.defaultValue){this.value='';}" />
+				<input type="submit" value="" class="button" />
+			</form>
+		</div>
+		<span class="footnote">&copy; Copyright &copy; 2011. All rights reserved</span>
+	</div> <!-- /#footer -->
+</body>
+</html>
+
